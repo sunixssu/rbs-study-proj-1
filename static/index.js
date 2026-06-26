@@ -18,8 +18,8 @@ async function getData() {
         let cpu_freq_elem = document.getElementById("cpu_freq")
         let ram_elem = document.getElementById("ram")
 
-        cpu_freq_elem.innerHTML = cpu_freq
-        ram_elem.innerHTML = ram
+        cpu_freq_elem.innerHTML = cpu_freq + " MHz"
+        ram_elem.innerHTML = ram + " GB"
     }
     socket.onerror = (error) => {
         console.error('Ошибка WebSocket:', error);
@@ -50,6 +50,11 @@ async function sendEcho() {
 
     echoSocket.onopen = (event) => {
         console.log("WebSocket connected!")
+
+        let inptTextEchoBlock = document.getElementById("inptTextEcho")
+        inptText = inptTextEchoBlock.value
+        jsonBody.msg = inptText
+        
         const timestamp = Date.now()
         const timeString = new Date(timestamp).toLocaleTimeString(); 
         let textResponse = jsonBody.msg + "<br>Timestamp:" + timeString
