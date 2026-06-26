@@ -1,17 +1,7 @@
 <html>
 <head>
     <title>Go Telemetry and Echo service</title>
-    <style>
-        .container {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-        }
-
-        .echoBlock {
-            margin-top: 25px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -21,28 +11,28 @@
         </h2>
         <div class="container">
             <div>
-                <b style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                <b class="textStyle">
                     CPU Freq:<br>
                 </b>
-                <output id="cpu_freq", style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                <output id="cpu_freq", class="textStyle">
                     0
                 </output>
             </div>
             <div>
-                <b style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                <b class="textStyle">
                     RAM:<br>
                 </b>
-                <output id="ram", style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                <output id="ram", class="textStyle">
                     0
                 </output>
             </div>
         </div>
         <div class="echoBlock">
-            <label for="inptTextEcho" style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Сообщение для echo:</label>
+            <label for="inptTextEcho" class="textStyle">Сообщение для echo:</label>
             <input type="text" id="inptTextEcho" placeholder="Введите текст..."><br>
             <button type="button" onclick="sendEcho()" style="margin-top: 10px; margin-bottom: 10px;">Send Message</button>
-            <label for="outputTextEcho" style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"><br>Ответ echo:</label>
-            <output id="outputTextEcho" style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"><br>Will Be Echo Message</output>
+            <label for="outputTextEcho" class="textStyle"><br>Ответ echo:</label>
+            <output id="outputTextEcho" class="textStyle"><br>Will Be Echo Message</output>
         </div>
     </center>
 </body>
