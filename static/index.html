@@ -1,0 +1,51 @@
+<html>
+<head>
+    <title>Go Telemetry and Echo service</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        .echoBlock {
+            margin-top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <center>
+        <h2 style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+            Telemetry and Echo v1.0
+        </h2>
+        <div class="container">
+            <div>
+                <b style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                    CPU Freq:<br>
+                </b>
+                <output id="cpu_freq", style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                    0
+                </output>
+            </div>
+            <div>
+                <b style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                    RAM:<br>
+                </b>
+                <output id="ram", style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                    0
+                </output>
+            </div>
+        </div>
+        <div class="echoBlock">
+            <label for="inptTextEcho" style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Сообщение для echo:</label>
+            <input type="text" id="inptTextEcho" placeholder="Введите текст..."><br>
+            <button type="button" onclick="sendEcho()" style="margin-top: 10px; margin-bottom: 10px;">Send Message</button>
+            <label for="outputTextEcho" style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"><br>Ответ echo:</label>
+            <output id="outputTextEcho" style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"><br>Will Be Echo Message</output>
+        </div>
+    </center>
+</body>
+</html>
+
+<script src="index.js"></script>
