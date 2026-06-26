@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"math"
 	"net/http"
+	"os"
+	"strconv"
+	"strings"
 	"study/errs"
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/shirou/gopsutil/cpu"
-	"github.com/shirou/gopsutil/mem"
 )
 
 type JsonTelemetry struct {
@@ -71,18 +72,42 @@ func HandleSendTelemetry(w http.ResponseWriter, r *http.Request) {
 	conn.SetReadDeadline(time.Now().Add(60 * time.Second))
 
 	for {
-		v, err := mem.VirtualMemory()
+		//data, err := os.ReadFile("/proc/cpuinfo")
+		data, err := os.ReadFile("/hostproc/cpuinfo")
 		if err != nil {
-			fmt.Println(errs.ErrorMemoryData, err)
+			fmt.Println("Error while trying to read data about CPU:", err)
 			return
 		}
-		cpuInfo, err := cpu.Info()
+
+		data_string := string(data)
+		// Делаем срез по строке, чтобы получить только число
+		cache_size_idx := strings.Index(data_string, "cache size")
+		cpu_mhz_idx := strings.Index(data_string, "cpu MHz")
+		cpu_mhz_string := strings.Join(strings.Fields(data_string[cpu_mhz_idx+10:cache_size_idx-1]), " ")
+		cpu_mhz_float, err := strconv.ParseFloat(cpu_mhz_string, 3)
 		if err != nil {
-			fmt.Println(errs.ErrorCPUData, err)
+			fmt.Println("Error while trying to convert string to float:", err)
 			return
 		}
-		cpu_mhz_int := int64(cpuInfo[0].Mhz)
-		memtotal_int := int64(math.Ceil(float64(v.Total) / 1024 / 1024 / 1024))
+
+		//data, err = os.ReadFile("/proc/meminfo")
+		data, err = os.ReadFile("/hostproc/meminfo")
+		if err != nil {
+			fmt.Println("Error while trying to read data about RAM:", err)
+			return
+		}
+		data_string = string(data)
+		memfree_idx := strings.Index(data_string, "MemFree")
+		memtotal_string := strings.Join(strings.Fields(data_string), " ")[10 : memfree_idx-11]
+		memtotal_float, err := strconv.ParseFloat(memtotal_string, 3)
+		if err != nil {
+			fmt.Println("Error while trying to convert string to float:", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		cpu_mhz_int := int64(cpu_mhz_float)
+		memtotal_int := int64(math.Ceil(memtotal_float / 1024 / 1024))
 
 		jsonTelemetry := JsonTelemetry{
 			Cpu_Freq: cpu_mhz_int,
