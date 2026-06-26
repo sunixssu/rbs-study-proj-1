@@ -1,3 +1,8 @@
+let echoSocket = null;
+let jsonBody = {
+    msg: "test",
+}
+
 async function getData() {
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     const socket = new WebSocket('ws://localhost:8080/telemetry')
@@ -22,16 +27,28 @@ async function getData() {
 }
 
 async function sendEcho() {
-    let jsonBody = {
-        msg: "test",
+
+    if (echoSocket && (echoSocket.readyState == WebSocket.OPEN || echoSocket.readyState == WebSocket.CONNECTING)) {
+        console.log("WebSocket already open")
+
+        let inptTextEchoBlock = document.getElementById("inptTextEcho")
+        inptText = inptTextEchoBlock.value
+        jsonBody.msg = inptText
+
+        const timestamp = Date.now()
+        const timeString = new Date(timestamp).toLocaleTimeString(); 
+        let textResponse = jsonBody.msg + "<br>Timestamp:" + timeString
+
+        outputTextEchoBlock.style.display = "block"
+        console.log(jsonBody)
+        outputTextEchoBlock.innerHTML = textResponse
+        echoSocket.send(textResponse)
+    } 
+    else {
+        echoSocket = new WebSocket('ws://localhost:8080/echo')
     }
-    let inptTextEchoBlock = document.getElementById("inptTextEcho")
-    inptText = inptTextEchoBlock.value
-    jsonBody.msg = inptText
 
-    const socket = new WebSocket('ws://localhost:8080/echo')
-
-    socket.onopen = (event) => {
+    echoSocket.onopen = (event) => {
         console.log("WebSocket connected!")
         const timestamp = Date.now()
         const timeString = new Date(timestamp).toLocaleTimeString(); 
@@ -40,7 +57,7 @@ async function sendEcho() {
         outputTextEchoBlock.style.display = "block"
         console.log(jsonBody)
         outputTextEchoBlock.innerHTML = textResponse
-        socket.send(textResponse)
+        echoSocket.send(textResponse)
     }
 }
 
